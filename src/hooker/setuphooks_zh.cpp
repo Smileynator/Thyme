@@ -25,6 +25,7 @@
 #include "commandline.h"
 #include "commandlist.h"
 #include "compressionmanager.h"
+#include "controlbar.h"
 #include "copyprotect.h"
 #include "datachunk.h"
 #include "ddsfile.h"
@@ -948,6 +949,13 @@ void Setup_Hooks()
         static_cast<void (SurfaceClass::*)(unsigned, unsigned, unsigned, unsigned, unsigned, unsigned, SurfaceClass *)>(
             &SurfaceClass::Copy));
     Hook_Method(0x0081DD90, &SurfaceClass::Draw_Pixel);
+
+    // controlbar.h
+    //Hook_Method(0x0045CBF0, &ControlBar::Hook_Ctor);
+    Hook_Method(0x005A3770, &ControlBar::Reset_Build_Queue_Data);
+    Hook_Method(0x00461620, &ControlBar::Get_Background_Marker_Position);
+    Hook_Method(0x00461600, &ControlBar::Get_Foreground_Marker_Position);
+    //Hook_Function(0x00549870, &ControlBar::Calculate_Veterancy_Overlay_For_Object); //TODO Object class
 
     // image.h
     Hook_Method(0x00519070, &Image::Hook_Ctor);

@@ -404,3 +404,9 @@ DynamicVectorClass<ThreadTracker *> &g_threadTracker =
 // drawgroupinfo.cpp
 class DrawGroupInfo;
 DrawGroupInfo *&g_theDrawGroupInfo = Make_Global<DrawGroupInfo *>(PICK_ADDRESS(0x00A2C880, 0));
+
+// controlbar.cpp
+class Image;
+Image *&g_veteranIconLvl1 = Make_Global<Image *>(PICK_ADDRESS(0x00A2B6E4, 0));
+Image *&g_veteranIconLvl2 = Make_Global<Image *>(PICK_ADDRESS(0x00A2B6E8, 0));
+Image *&g_veteranIconLvl3 = Make_Global<Image *>(PICK_ADDRESS(0x00A2B6EC, 0));

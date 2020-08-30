@@ -76,23 +76,23 @@ public:
     void Do_Transport_Inventory_UI(Object *object, CommandSet *commandSet);
 
     // Methods
-    void Add_Common_Commands(Drawable *drawable, char flag);
-    void Animate_Special_Power_Shortcut(char flag);
+    void Add_Common_Commands(Drawable *drawable, char flag);//TODO drawable required
+    void Animate_Special_Power_Shortcut(char flag);//TODO GameWindow, AnimateWindowManager required
     void Evaluate_Context_UI();
-    CommandButton Find_Command_Button(Utf8String *name);
-    CommandSet Find_Command_Set(Utf8String *name);
-    CommandButton Find_Non_Const_Command_Button(Utf8String *name);
+    CommandButton *Find_Command_Button(Utf8String *name);
+    CommandSet *Find_Command_Set(Utf8String *name);
+    CommandButton *Find_Non_Const_Command_Button(Utf8String *name);
     void Get_Background_Marker_Position(int *x, int *y);
     void Get_Foreground_Marker_Position(int *x, int *y);
-    int Get_CommandAvailability(
+    uint32_t Get_CommandAvailability(
         CommandButton *button, Object *object, GameWindow *window, GameWindow *window2, char unknown);
     void Get_Star_Image(); // No return value?
     void Hide_Purchase_Science();
     void Hide_Special_Power_Shortcut();
     void Mark_UI_Dirty();
     void Init_Special_Power_Shortcut_Bar(Player *player);
-    CommandButton New_Command_Button(Utf8String *name);
-    CommandButton New_Command_Button_Override(CommandButton *button);
+    CommandButton *New_Command_Button(Utf8String *name);
+    CommandButton *New_Command_Button_Override(CommandButton *button);
     void Populate_Beacon(Object *object);
     void Populate_Build_Queue(Object *object);
     void Populate_Build_Tooltip_Layout(CommandButton *button, GameWindow *window);
@@ -118,10 +118,10 @@ public:
     void Update_OCL_Timer_Text_Displayer(uint32_t, float);
     void Update_Slot_Exit_Image(Image* image);
     void Update_Special_Power_Shortcut();
-	//TODO not all methods are present, because i couldn't trace anything towards calling sites to ID their location
+	//TODO not all methods are present/implemented, because i couldn't trace anything towards any calling sites
 	
-    static Image Calculate_Veterancy_Overlay_For_Object(Object *object);
-    static Image Calculate_Veterancy_Overlay_For_Object(ThingTemplate *thing);
+    static Image *Calculate_Veterancy_Overlay_For_Object(Object *object);
+    static Image *Calculate_Veterancy_Overlay_For_Thing(ThingTemplate *thing);
     static void Init_Observer_Controls();
     static void Parse_Command_Button_Definition(INI *ini);
     static void Parse_Command_Set_Definition(INI *ini);
@@ -130,6 +130,11 @@ public:
     static void Populate_Observer_List();
     static void Process_Command_UI(GameWindow *window, int gadgetGameMessage); // not a clue what this 2nd param type is
     static void Reset_Contain_Data();
+
+	#ifdef GAME_DLL
+    ControlBar *Hook_Ctor() { return new (this) ControlBar(); }
+    void Hook_Dtor() { ControlBar::~ControlBar(); }
+#endif
 
 private: 
 	//TODO resolve all padded and unknown variables
@@ -163,7 +168,7 @@ private:
     GameWindow *m_rightHUDWindow;
     GameWindow *m_rightHUDCameoWindow;
     GameWindow *m_unitUpgradeWindows[5];
-    GameWindow *m_unitySelectedWindow;
+    GameWindow *m_unitSelectedWindow;
     GameWindow *m_popUpCommunicatorWindow;
     GameWindow *m_generalsExpPointsWindow;
     GameWindow *m_ScieneRank1Windows[4];
@@ -202,3 +207,13 @@ private:
     int m_radarAttackGlowCounter;
     GameWindow *m_radarAttackGlowWindow;
 };
+
+#ifdef GAME_DLL
+extern Image *&g_veteranIconLvl1;
+extern Image *&g_veteranIconLvl2;
+extern Image *&g_veteranIconLvl3;
+#else
+extern Image *g_veteranIconLvl1;
+extern Image *g_veteranIconLvl2;
+extern Image *g_veteranIconLvl3;
+#endif
